@@ -1,6 +1,8 @@
 // ❗ The ✨ TASKS inside this component are NOT IN ORDER.
 // ❗ Check the README for the appropriate sequence to follow.
-import React from 'react'
+import React, { useState, useEffect } from 'react' 
+import axios from 'axios'
+import * as yup from 'yup'
 
 const e = { // This is a dictionary of validation error messages.
   // username
@@ -22,10 +24,20 @@ const e = { // This is a dictionary of validation error messages.
 // The schema should use the error messages contained in the object above.
 
 export default function App() {
+  
   // ✨ TASK: BUILD YOUR STATES HERE
   // You will need states to track (1) the form, (2) the validation errors,
   // (3) whether submit is disabled, (4) the success message from the server,
   // and (5) the failure message from the server.
+function initialValues() {
+  ({ username: '', favLanguage: '', favFood: '', agreement: 'false' })
+}
+const errorInitValues = () => {
+  ({ username: '', favLanguage: '', favFood: '', agreement: '' })
+}
+const [ values, setValues ] = useState(initialValues())
+const [ errors, setErrors ] = useState (errorInitValues)
+
 
   // ✨ TASK: BUILD YOUR EFFECT HERE
   // Whenever the state of the form changes, validate it against the schema
