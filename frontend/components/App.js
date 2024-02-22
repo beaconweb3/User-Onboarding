@@ -22,6 +22,12 @@ const e = { // This is a dictionary of validation error messages.
 
 // ✨ TASK: BUILD YOUR FORM SCHEMA HERE
 // The schema should use the error messages contained in the object above.
+function initialValues() {
+  ({ username: '', favLanguage: '', favFood: '', agreement: 'false' })
+}
+const initialErrors= () => {
+  ({ username: '', favLanguage: '', favFood: '', agreement: '' })
+}
 
 export default function App() {
   
@@ -29,14 +35,11 @@ export default function App() {
   // You will need states to track (1) the form, (2) the validation errors,
   // (3) whether submit is disabled, (4) the success message from the server,
   // and (5) the failure message from the server.
-function initialValues() {
-  ({ username: '', favLanguage: '', favFood: '', agreement: 'false' })
-}
-const errorInitValues = () => {
-  ({ username: '', favLanguage: '', favFood: '', agreement: '' })
-}
-const [ values, setValues ] = useState(initialValues())
-const [ errors, setErrors ] = useState (errorInitValues)
+
+const [values, setValues] = useState(initialValues())
+const [errors, setErrors] = useState(initialErrors())
+const [serverSuccess, setServerSuccess] = useState()
+const [serverFailure, setServerFailure] = useState()
 
 
   // ✨ TASK: BUILD YOUR EFFECT HERE
@@ -63,14 +66,14 @@ const [ errors, setErrors ] = useState (errorInitValues)
   return (
     <div> {/* TASK: COMPLETE THE JSX */}
       <h2>Create an Account</h2>
-      <form>
-        <h4 className="success">Success! Welcome, new user!</h4>
-        <h4 className="error">Sorry! Username is taken</h4>
+      <form onSubmit={onSubmit}>
+       { serverSuccess && <h4 className="success">Success! Welcome, new user!</h4> }
+       { serverFailure && <h4 className="error">Sorry! Username is taken</h4> }
 
         <div className="inputGroup">
           <label htmlFor="username">Username:</label>
           <input id="username" name="username" type="text" placeholder="Type Username" />
-          <div className="validation">username is required</div>
+          { errors.username && <div className="validation">username is required</div> }
         </div>
 
         <div className="inputGroup">
@@ -85,7 +88,7 @@ const [ errors, setErrors ] = useState (errorInitValues)
               Rust
             </label>
           </fieldset>
-          <div className="validation">favLanguage is required</div>
+          { errors.favLanguage && <div className="validation">favLanguage is required</div> }
         </div>
 
         <div className="inputGroup">
@@ -96,7 +99,7 @@ const [ errors, setErrors ] = useState (errorInitValues)
             <option value="spaghetti">Spaghetti</option>
             <option value="broccoli">Broccoli</option>
           </select>
-          <div className="validation">favFood is required</div>
+          { errors.favFood && <div className="validation">favFood is required</div> }
         </div>
 
         <div className="inputGroup">
@@ -104,7 +107,7 @@ const [ errors, setErrors ] = useState (errorInitValues)
             <input id="agreement" type="checkbox" name="agreement" />
             Agree to our terms
           </label>
-          <div className="validation">agreement is required</div>
+          { errors.agreement && <div className="validation">agreement is required</div> }
         </div>
 
         <div>
