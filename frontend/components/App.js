@@ -26,7 +26,7 @@ const userSchema = yup.object().shape({
     .min(3, e.usernameMin).max(20, e.usernameMax),
   favLanguage: yup.string()
     .required(e.favLanguageRequired).trim()
-    .oneOf(['javascript', 'rust']. e.favLanguageOptions),
+    .oneOf(['javascript', 'rust'], e.favLanguageOptions),
   favFood: yup.string()
    .required(e.favFoodRequired).trim()
    .oneOf(['broccoli', 'spaghetti', 'pizza'], e.favFoodOptions),
