@@ -20,6 +20,21 @@ const e = { // This is a dictionary of validation error messages.
   agreementOptions: 'agreement must be accepted',
 }
 
+const userSchema = yup.object().shape({
+  username: yup.string().trim()
+    .required(e.usernameRequired)
+    .min(3, e.usernameMin).max(20, e.usernameMax),
+  favLanguage: yup.string()
+    .required(e.favLanguageRequired).trim()
+    .oneOf(['javascript', 'rust']. e.favLanguageOptions),
+  favFood: yup.string()
+   .required(e.favFoodRequired).trim()
+   .oneOf(['broccoli', 'spaghetti', 'pizza'], e.favFoodOptions),
+  agreement: yup.boolean()
+   .required(e.agreementRequired)
+   .oneOf([true], e.agreementOptions),
+})
+
 // ✨ TASK: BUILD YOUR FORM SCHEMA HERE
 // The schema should use the error messages contained in the object above.
 const initialValues = () => ({ 
@@ -47,7 +62,11 @@ const [values, setValues] = useState(initialValues())
 const [errors, setErrors] = useState(initialErrors())
 const [serverSuccess, setServerSuccess] = useState()
 const [serverFailure, setServerFailure] = useState()
+const [formEnabled, setFormEnabled] = useState(false)
 
+useEffect(() => {
+  userSchema.isValid(values).then(setFormEnabled)
+}, [values])
 
   // ✨ TASK: BUILD YOUR EFFECT HERE
   // Whenever the state of the form changes, validate it against the schema
@@ -76,6 +95,10 @@ const [serverFailure, setServerFailure] = useState()
     .then(res => {
       setServerSuccess(res.data.message)
       setServerFailure()
+    })
+    .catch(err => {
+      setServerFailure(err.response.data.message)
+      debugger
     })
   }
 
@@ -127,7 +150,7 @@ const [serverFailure, setServerFailure] = useState()
         </div>
 
         <div>
-          <input type="submit" disabled={false} />
+          <input disabled={!formEnabled} type="submit" />
         </div>
       </form>
     </div>
